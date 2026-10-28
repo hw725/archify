@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "diagram_type": "journey",
+  "meta": {
+    "title": "Trial to Paid",
+    "subtitle": "The first week of a self-serve workspace",
+    "persona": "Solo founder, evaluating on a weekend",
+    "output": "examples/journey-trial-to-paid.html"
+  },
+  "extraRow": "Owner",
+  "stages": [
+    { "id": "signup", "label": "Sign up", "sentiment": "high", "action": "Creates a workspace", "touchpoint": "landing page", "extra": "growth" },
+    { "id": "import", "label": "Import data", "sentiment": "med-high", "action": "Uploads first CSV", "touchpoint": "web app", "extra": "onboarding" },
+    { "id": "limit", "label": "Hit the limit", "sentiment": "low", "action": "Blocked at 500 rows", "touchpoint": "in-app banner", "extra": "billing", "pain": "no warning before the wall" },
+    { "id": "compare", "label": "Compare plans", "sentiment": "med-low", "action": "Reads pricing page", "touchpoint": "pricing page", "extra": "billing" },
+    { "id": "upgrade", "label": "Upgrade", "sentiment": "neutral", "action": "Enters card, unlocks rows", "touchpoint": "checkout", "extra": "billing" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "The dip",
+      "items": [
+        "Sentiment bottoms out when the row limit appears without warning",
+        "The banner is the first mention of any limit",
+        "Half of trials churn at this stage"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Recovery",
+      "items": [
+        "Pricing page reads clearly but arrives too late",
+        "Checkout is short; sentiment only recovers to neutral"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Proposed fix",
+      "items": [
+        "Show a row-count meter from the first import",
+        "Offer the upgrade inside the banner, not on a separate page"
+      ]
+    }
+  ]
+}

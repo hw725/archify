@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "diagram_type": "kanban",
+  "meta": {
+    "title": "Platform Team Board",
+    "subtitle": "Work-in-progress snapshot for sprint 42, day 6",
+    "output": "examples/kanban-platform-board.html"
+  },
+  "columns": [
+    { "id": "backlog", "label": "Backlog" },
+    { "id": "progress", "label": "In progress", "limit": 3 },
+    { "id": "review", "label": "Review", "limit": 3 },
+    { "id": "done", "label": "Done" }
+  ],
+  "items": [
+    { "id": "ava-231", "column": "backlog", "title": "Audit log export", "sublabel": "AVA-231 · unassigned" },
+    { "id": "ava-232", "column": "backlog", "title": "SSO group sync", "sublabel": "AVA-232 · unassigned" },
+    { "id": "ava-238", "column": "backlog", "title": "Retention policy UI", "sublabel": "AVA-238 · unassigned" },
+    { "id": "ava-214", "column": "progress", "title": "Rate limiter rollout", "sublabel": "AVA-214 · nadia", "state": "blocked" },
+    { "id": "ava-219", "column": "progress", "title": "Queue backpressure", "sublabel": "AVA-219 · omar" },
+    { "id": "ava-222", "column": "progress", "title": "Secrets rotation", "sublabel": "AVA-222 · priya", "state": "waiting" },
+    { "id": "ava-227", "column": "progress", "title": "Tenant quota alerts", "sublabel": "AVA-227 · omar" },
+    { "id": "ava-209", "column": "review", "title": "Schema migration v12", "sublabel": "AVA-209 · nadia" },
+    { "id": "ava-211", "column": "review", "title": "Webhook retries", "sublabel": "AVA-211 · lin" },
+    { "id": "ava-201", "column": "done", "title": "Cache warmers", "sublabel": "AVA-201 · lin", "state": "done" },
+    { "id": "ava-204", "column": "done", "title": "Health endpoint v2", "sublabel": "AVA-204 · priya", "state": "done" }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Over the limit",
+      "items": [
+        "In progress holds 4 cards against a WIP limit of 3",
+        "Rate limiter rollout is blocked on the edge team",
+        "Nothing new enters the column until one card moves"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Waiting on others",
+      "items": [
+        "Secrets rotation waits on the security sign-off",
+        "Review column has capacity for one more card"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Archive point",
+      "items": [
+        "Done column is cleared at sprint close",
+        "Two cards shipped since day 1"
+      ]
+    }
+  ]
+}

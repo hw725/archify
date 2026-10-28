@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "diagram_type": "fishbone",
+  "meta": {
+    "title": "Checkout Latency Post-mortem",
+    "subtitle": "Root-cause analysis for the 2026-09-12 p99 regression",
+    "output": "examples/fishbone-checkout-latency.html"
+  },
+  "effect": {
+    "label": "Checkout p99 > 2s",
+    "sublabel": "observed 14:02–15:40 UTC"
+  },
+  "bones": [
+    {
+      "id": "data",
+      "label": "Data",
+      "rootCause": true,
+      "subcauses": ["stale orders index", "row-lock contention", "vacuum backlog"]
+    },
+    {
+      "id": "deploy",
+      "label": "Deploy",
+      "subcauses": ["canary skipped", "config drift"]
+    },
+    {
+      "id": "traffic",
+      "label": "Traffic",
+      "subcauses": ["flash sale spike", "bot retries"]
+    },
+    {
+      "id": "infra",
+      "label": "Infra",
+      "subcauses": ["pool exhausted", "noisy neighbour"]
+    },
+    {
+      "id": "observability",
+      "label": "Observability",
+      "subcauses": ["alert threshold high"]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Confirmed root cause",
+      "items": [
+        "The orders index was stale after the 13:50 bulk import",
+        "Row locks piled up behind the sequential scan",
+        "Vacuum had been deferred by the import job"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Contributing factors",
+      "items": [
+        "Canary stage was skipped for the hotfix deploy",
+        "Flash-sale traffic doubled the write rate",
+        "Connection pool hit its ceiling under retries"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Ruled out",
+      "items": [
+        "Noisy-neighbour hypothesis: host metrics flat",
+        "Bot retries were rate-limited at the edge",
+        "Alerting delay only lengthened detection, not the incident"
+      ]
+    }
+  ]
+}

@@ -23,58 +23,24 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "title",
-        "output"
+        "title"
       ],
       "properties": {
         "title": {
           "type": "string",
           "minLength": 1
         },
-        "locale": {
-          "$ref": "common.schema.json#/$defs/locale"
-        },
-        "translations": {
-          "$ref": "common.schema.json#/$defs/translations"
-        },
         "subtitle": {
           "type": "string"
         },
         "output": {
-          "$ref": "common.schema.json#/$defs/portableOutputPath"
+          "type": "string"
         },
         "animation": {
-          "$ref": "common.schema.json#/$defs/animation"
-        },
-        "visual_preset": {
-          "$ref": "common.schema.json#/$defs/visualPreset"
-        },
-        "quality_profile": {
-          "$ref": "common.schema.json#/$defs/qualityProfile"
-        },
-        "repository": {
-          "$ref": "common.schema.json#/$defs/repository"
-        },
-        "views": {
-          "$ref": "common.schema.json#/$defs/guidedViews"
-        },
-        "legend": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "mode": { "$ref": "common.schema.json#/$defs/legendMode" },
-            "entries": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "default": { "$ref": "common.schema.json#/$defs/legendEntry" },
-                "emphasis": { "$ref": "common.schema.json#/$defs/legendEntry" },
-                "security": { "$ref": "common.schema.json#/$defs/legendEntry" },
-                "dashed": { "$ref": "common.schema.json#/$defs/legendEntry" },
-                "database": { "$ref": "common.schema.json#/$defs/legendEntry" }
-              }
-            }
-          }
+          "enum": [
+            "trace",
+            "none"
+          ]
         },
         "viewBox": {
           "type": "array",
@@ -142,13 +108,6 @@
           "tag": {
             "type": "string"
           },
-          "icon": { "$ref": "common.schema.json#/$defs/nodeIcon" },
-          "brand": {
-            "$ref": "common.schema.json#/$defs/brandMark"
-          },
-          "sources": {
-            "$ref": "common.schema.json#/$defs/sourceReferences"
-          },
           "stage": {
             "type": "integer",
             "minimum": 0
@@ -182,9 +141,6 @@
           "label"
         ],
         "properties": {
-          "id": {
-            "$ref": "common.schema.json#/$defs/id"
-          },
           "from": {
             "$ref": "common.schema.json#/$defs/id"
           },
@@ -211,10 +167,20 @@
             ]
           },
           "fromSide": {
-            "$ref": "common.schema.json#/$defs/side"
+            "enum": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ]
           },
           "toSide": {
-            "$ref": "common.schema.json#/$defs/side"
+            "enum": [
+              "left",
+              "right",
+              "top",
+              "bottom"
+            ]
           },
           "channelX": {
             "type": "number"
@@ -242,7 +208,8 @@
             }
           },
           "width": {
-            "$ref": "common.schema.json#/$defs/relationshipWidth"
+            "type": "number",
+            "minimum": 0.5
           }
         }
       }

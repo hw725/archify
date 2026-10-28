@@ -15,21 +15,6 @@ export function componentBox(c) {
   };
 }
 
-export function entityBox(e) {
-  return {
-    id: e.id,
-    label: e.label,
-    x: Math.round(e.x),
-    y: Math.round(e.y),
-    width: e.width,
-    height: e.height,
-    attributes: (Array.isArray(e.attributes) ? e.attributes : []).map((attribute) => attribute.name),
-    ...(Number.isInteger(e.row) ? { row: e.row } : {}),
-    ...(Number.isInteger(e.col) ? { col: e.col } : {}),
-    ...(Array.isArray(e.pos) ? { pos: e.pos.map(Math.round) } : {}),
-  };
-}
-
 export function boundaryBox(b) {
   return {
     kind: b.kind,
@@ -50,7 +35,7 @@ export function connectionPath(conn, routed, labelAt) {
     variant: conn.variant ?? 'default',
     route: conn.route ?? 'auto',
     // These points are repair inputs: rounding a fractional port makes a
-    // reused waypoint diagonal relative to the actual endpoint.
+    // reused waypoint diagonal relative to the actual endpoint (upstream 6049fd6).
     points: routed.points.map(([x, y]) => [x, y]),
     ...(labelAt ? { labelAt: labelAt.map(Math.round) } : {}),
   };
