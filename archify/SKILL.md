@@ -32,6 +32,8 @@ The eight typed renderers validate JSON against schemas via `ajv`. From this ski
 npm install
 ```
 
+**(로컬, hw725 fork)** skills-manager로 설치했으면(이 폴더가 `~/.skills-manager/skills/` 아래) 위 명령을 이 폴더에서 돌리지 않는다 — 폴더 안 `node_modules`가 있으면 skills-manager가 fork 갱신을 조용히 건너뛴다(2026-10-28 실측, `held_back_removals`). ajv는 라이브러리 상위 `~/.skills-manager/node_modules`에 있고(claude-skills `scripts/skills_manager_sync.py apply`가 깐다) Node가 상위 폴더로 거슬러 찾는다. 이 폴더에서 `node -e "require.resolve('ajv')"`가 실패할 때만 `npm install --prefix ~/.skills-manager ajv@^8.17.1`로 깐다. 저장소 클론 등 다른 설치는 위 명령 그대로다.
+
 Without it the renderers still run — they print a warning and skip schema validation, keeping their own layout checks. The **generated HTML never has dependencies**; only the renderers do.
 
 This copy tracks upstream tt-a1i/archify **selectively** (`.upstream.json` `mode: selective-tracking`, true base `9d54f0e7`): weekly screening keeps running and self-contained renderer-level fixes are ported by hand, but the v2.13+ viewer runtime, brand-marks, delta and migration surfaces are intentionally not adopted — see `references/upstream-watch.md` for the measured reasons and the reopen condition.
