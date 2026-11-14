@@ -18,9 +18,9 @@ Create professional technical diagrams as self-contained HTML files with inline 
 
 Use this skill as the canonical path for standalone HTML/SVG artifacts, typed renderers, schema and layout validation, and PNG/JPEG/WebP/SVG export across architecture, workflow, sequence, data-flow, lifecycle, fishbone, kanban, and user-journey diagrams. If the deliverable must instead live inline in a Markdown file, write a Mermaid block there (see the mapping table below, read in reverse) rather than an HTML artifact.
 
-Specialist requests take precedence: use the `dataviz` skill for statistical charts. DOT and other dependency graphs stay here — read a pasted DOT file like Mermaid (see below): nodes become architecture components, `subgraph cluster_*` becomes a region boundary, edges become connections; keep only the edges that carry the story. For a dependency graph that must render inline in Markdown, emit a Mermaid `flowchart` instead. Obsidian `.canvas` mind maps go to the claude-obsidian canvas skill. (Local `vega`·`mindmap`·`infocard`·`infographic` skills were removed 2026-10-07.)
+Specialist requests take precedence: use the `dataviz` skill for statistical charts. DOT and other dependency graphs stay here — read a pasted DOT file like Mermaid (see below): nodes become architecture components, `subgraph cluster_*` becomes a region boundary, edges become connections; keep only the edges that carry the story. For a dependency graph that must render inline in Markdown, emit a Mermaid `flowchart` instead. Obsidian `.canvas` mind maps go to the claude-obsidian canvas skill.
 
-The PlantUML stencil skills (`uml`, `bpmn`, `archimate`, `cloud`, `network`, `security`, `data-analytics`, `iot`) were removed on 2026-08-11 in the skill inventory review. Handle requests that name those notations here — the sequence, state, workflow, and data-flow renderers cover the common cases, and Mermaid conversion covers the rest. Do not route to them; they no longer exist.
+Handle requests that name UML, BPMN, ArchiMate, cloud, network, security, data-analytics, or IoT notations here — the sequence, state, workflow, and data-flow renderers cover the common cases, and Mermaid conversion covers the rest.
 
 Every diagram ships with a **dark/light theme toggle** (persists in `localStorage`, respects `prefers-color-scheme`), an **export menu** (copy PNG to clipboard; download PNG/JPEG/WebP rasterized natively at up to 4× resolution; download a **dual-theme SVG** that follows the embedding host's `prefers-color-scheme` — ideal for GitHub READMEs), and a **CSS-variable color system** that keeps both themes consistent. To skin a diagram in a project's own brand colors and fonts, follow `references/brand-matching.md` (variable mapping + gates; the template itself stays untouched).
 
@@ -36,7 +36,7 @@ npm install
 
 Without it the renderers still run — they print a warning and skip schema validation, keeping their own layout checks. The **generated HTML never has dependencies**; only the renderers do.
 
-This copy tracks upstream tt-a1i/archify **selectively** (`.upstream.json` `mode: selective-tracking`, true base `9d54f0e7`): weekly screening keeps running and self-contained renderer-level fixes are ported by hand, but the v2.13+ viewer runtime, brand-marks, delta and migration surfaces are intentionally not adopted — see `references/upstream-watch.md` for the measured reasons and the reopen condition.
+This copy tracks upstream tt-a1i/archify **selectively** (hw725 fork, `kit-scope.json` `track: selective`, true base `9d54f0e7`): weekly screening keeps running and self-contained renderer-level fixes are ported by hand, but the v2.13+ viewer runtime, brand-marks, delta and migration surfaces are intentionally not adopted — see `references/upstream-watch.md` for the measured reasons and the reopen condition.
 
 If you have no shell access at all (e.g. the skill was added as project knowledge), fall back to architecture mode for every request: hand-place SVG into `assets/template.html` following the Design System below, and run the self-review checklist before delivering.
 
@@ -59,7 +59,7 @@ Layout types still under upstream watch (not implemented — sankey, wardley, de
 
 ## Mermaid as an Input Dialect
 
-When the user pastes Mermaid code, do NOT try to render or parse it mechanically — read it for structure and **lay out from scratch** in the matching archify mode:
+When the user pastes Mermaid code, read it for structure and lay out from scratch in the matching archify mode instead of converting it mechanically:
 
 | Mermaid | Archify mode | Mapping |
 |---------|--------------|---------|
@@ -136,7 +136,7 @@ Render: `node bin/archify.mjs render architecture <input>.json <output>.html`.
 
 **Free placement** — `pos: [x, y]` is the component's top-left; `size: [w, h]` defaults to `[120, 60]`. Unlike typed modes there is no lane/stage grid — asymmetric placement is yours to choose. `meta.viewBox` is optional (auto-fitted).
 
-**Grid placement (#8)** — when manual coordinates are painful, set semantic cells instead of doing arithmetic:
+**Grid placement** — when manual coordinates are painful, set semantic cells instead of doing arithmetic:
 
 ```json
 {
@@ -150,7 +150,7 @@ Render: `node bin/archify.mjs render architecture <input>.json <output>.html`.
 
 `pos` still wins when present (override one cell). This is **not** auto-layout — spacing is fixed cell math. Example: `examples/archify-repo-grid.architecture.json`.
 
-**Inspect layout (#9)** — after editing JSON, dump computed boxes without opening HTML:
+**Inspect layout** — after editing JSON, dump computed boxes without opening HTML:
 
 ```bash
 node bin/archify.mjs inspect architecture my.architecture.json
@@ -159,13 +159,13 @@ node bin/archify.mjs inspect architecture my.architecture.json
 
 Output includes component rects, boundaries, connection point paths, and label positions.
 
-**The renderer does the mechanical work that used to be hand-tuned**, so you only choose coordinates and meaning:
+**The renderer does the mechanical work**, so you only choose coordinates and meaning:
 
 - **Free coordinates** — `pos: [x, y]` is the component's top-left; `size: [w, h]` defaults to `[120, 60]`. Unlike the typed modes there is no lane/stage grid — asymmetric placement is yours to choose. `meta.viewBox` is optional (auto-fitted to your components + a legend row).
 - **Grid placement** — optional `layout.mode: "grid"` with `row`/`col` per component (see above). Not dagre; fixed cell spacing only.
-- **Boundaries from `wraps`** — list the component ids a `region` (dashed amber) or `security-group` (dashed rose) encloses; the renderer computes the box with correct 30/50 padding automatically. Never hand-arithmetic a boundary again.
+- **Boundaries from `wraps`** — list the component ids a `region` (dashed amber) or `security-group` (dashed rose) encloses; the renderer computes the box with correct 30/50 padding automatically.
 - **Connections** route like edges (`variant`, `fromSide`/`toSide`, `route: straight|orthogonal-h|orthogonal-v|auto`, `via`, `labelDx/labelDy/labelAt`). For a vertical labeled connection, push the label into the gap with `labelDy` (the validator will tell you if it lands on a box).
-- The renderer auto-emits the two-rect `c-mask` pattern, draws arrows before boxes (z-order), builds the legend from the component types you used, and **fails fast on component overlap, off-canvas components/boundaries, unknown wraps/connection ids, label-vs-component collisions, and non-finite coordinates** — the same reliability the other four modes already had.
+- The renderer auto-emits the two-rect `c-mask` pattern, draws arrows before boxes (z-order), builds the legend from the component types you used, and **fails fast on component overlap, off-canvas components/boundaries, unknown wraps/connection ids, label-vs-component collisions, and non-finite coordinates**.
 
 ### Hand-placed fallback (no renderer available)
 
